@@ -152,7 +152,8 @@ def return_summary(product1,product2):
 
     presence = EC.presence_of_element_located
     visible = EC.visibility_of_element_located
-
+    driver.find_element(By.XPATH,'//*[@id="chips"]/yt-chip-cloud-chip-renderer[3]').click()
+    sleep(3)
     wait.until(visible((By.XPATH, "//*[@id='video-title']")))
     driver.find_element(By.XPATH,"//*[@id='video-title']").click()
     
