@@ -26,11 +26,11 @@ class TryExcept:
         except AttributeError:
             return "Valor No Disponible"
 
-def scraping(head):
+def scraping(head,produbuscar,nombre_archivo):
     datosAmazon = []
     catchClause = TryExcept()
 
-    produbuscar = str(input("Ingrese el producto a buscar: "))
+    #produbuscar = str(input("Ingrese el producto a buscar: "))
     produinuser = produbuscar.replace(" ","+")
     ingresoProducto = f"https://www.amazon.com/s?k={produinuser}"
 
@@ -40,6 +40,8 @@ def scraping(head):
         print("El link de Amazon no es válido")
         sys.exit()
 
+    print(ingresoProducto)
+    
     with sync_playwright() as play:
         navegador = play.chromium.launch(headless=head, slow_mo=3*1000)
         pagina = navegador.new_page(user_agent=agenteUsuario())
@@ -72,13 +74,14 @@ def scraping(head):
             ultimaPagina = pagina.query_selector(
                 totalPaginasUno).inner_text().strip()
         except:
-            ultimaPagina = pagina.query_selector(
-                totalPaginasDos)[-2].get_attribute('aria-label').split()[-1] 
+            # ultimaPagina = pagina.query_selector(
+            #     totalPaginasDos)[-2].get_attribute('aria-label').split()[-1] 
+            ultimaPagina=1
 
         print(f"El numero de paginas es: {ultimaPagina}")
         print(f"Realizando scraping a: {produbuscar}")  
 
-        for click in range(1,int(ultimaPagina)):
+        for click in range(1,2):
             print(f"pagina de scraping numero: {click}")
             pagina.wait_for_timeout(timeout=tiempoAlea(8)*1000)
             for content in pagina.query_selector_all(contenidorPrincipal):
@@ -103,7 +106,7 @@ def scraping(head):
     print(f"Scraping realizado con exito")
 
     df = pd.DataFrame(datosAmazon)
-    df.to_excel(f"{produbuscar}.xlsx",index=False)
+    df.to_excel(f"output/{nombre_archivo}.xlsx",index=False)
     print(f"{produbuscar}.xlsx creado con exito")
 
 
