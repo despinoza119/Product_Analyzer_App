@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
-import time as time
+import time
 from youtube import obtain_transcript
 from resume import compare_products
 from youtube import return_summary
-from tools import scraping
+from amazon_scrapper import scraping
 
 def main():
     st.title("Product Comparison")
@@ -24,25 +24,23 @@ def main():
             obtain_transcript(input1, input2)
             result = compare_products()
 
+            # Display result as a paragraph in one page
+            st.write("## Comparison of products:")
+            st.write(result)
             tiempoInicio = time.time()
 
             make_headless = True
-        
-            scraping(make_headless,input1,"product1")
-            scraping(make_headless,input2,"product2")
 
-            df1=pd.read_excel("output/product1.xlsx")
-            df2=pd.read_excel("output/product2.xlsx")
-            st.table(df1)
-            st.table(df2)
+            scraping(make_headless, input1, "product1")
+            scraping(make_headless, input2, "product2")
 
-            # Dividir el resultado en dos partes en el primer *
-            result_parts = result.split('-----')
-            if len(result_parts) > 1:
-                col1.write(f"{result_parts[0]}")
-                col2.write(f"{result_parts[1]}")
-            else:
-                st.write("Error in processing the result.")
+            # Display tables in another page
+            st.write("## Amazon Prices:")
+            st.write(f"### {input1}:")
+            st.table(pd.read_excel("output/product1.xlsx"))
+            st.write(f"### {input2}:")
+            st.table(pd.read_excel("output/product2.xlsx"))
+
         else:
             st.write("Please enter two products to compare.")
 
