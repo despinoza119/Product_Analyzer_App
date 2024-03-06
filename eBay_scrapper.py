@@ -1,93 +1,73 @@
-import re
-import sys
+import numpy as np
 import pandas as pd
-from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
-from tools import tiempoAlea
-from tools import agenteUsuario
+from time import sleep
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import undetected_chromedriver as uc
 
 def scrapper(head, produbuscar, nombre_archivo):
-    datos_eBay = []
-    catchClause = []
+    option = webdriver.ChromeOptions()
+    option.add_argument(head)
+    driver = uc.Chrome(options=option)
 
-    produinuser = produbuscar.replace(" ", "+")
-    ingresoProducto = f"https://www.ebay.es/sch/i.html?_nkw={produinuser}"
+    name_list = []
+    price_list = []
+    image_list = []
+    seller_name_list = []
+    seller_rating_list = []
+    condition_list = []
 
-    eBay_link_pattern = re.search("^https://www.ebay.es/sch/i.html\?.+", ingresoProducto)
+    driver.get("https://www.ebay.com/")
 
-    if eBay_link_pattern == None:
-        print("El link de eBay no es válido")
-        sys.exit()
+    input = produbuscar
+    keywords = driver.find_element(By.XPATH, '//input[@class="gh-tb ui-autocomplete-input"]')
+    # To clear the searchbar
+    keywords.clear()
+    # Puts the input in the search bar
+    keywords.send_keys(input)
+    # Clicks search
+    search_bt = driver.find_element(By.XPATH, '//input[@class="btn btn-prim gh-spr"]').click()
 
-    print(ingresoProducto)
+    # Getting the links for each product
+    products = driver.find_elements(By.XPATH, '//div[@class="s-item__info clearfix"]/a')
+    link_list = []
+    for product in products:
+        link_list.append(product.get_attribute('href'))
 
-    with sync_playwright() as play:
-        # Launch browser
-        navegador = play.chromium.launch(headless=head, slow_mo=3*1000) # Slow_Mo reduces actioning by milliseconds.
-        # Create new page in browser
-        pagina = navegador.new_page(user_agent=agenteUsuario())
-        # Navigate to specified URL
-        pagina.goto(ingresoProducto)
-
-        pagina.wait_for_timeout(timeout=tiempoAlea(4)*1000) # Specifying a random time for next execution.
-        nombreProducto = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div/div[1]/div/a/div/img/@alt"
-
-        totalPaginasUno = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[62]/div[2]/span/span/nav/ol/li[9]/a"
-        totalPaginasDos = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[62]/div[2]/span/span/nav/ol/li[2]/a"
-        siguienteBoton = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[62]/div[2]/span/span/nav/a"
-
-        contenidorPrincipal = '//*[@id="srp-river-results"]'
-
-        enlace = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div/div[2]/a"
-        precio = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div/div[2]/div[2]/div[1]/span[@class='s-item__price']"
-        #precioAnterior = ""
-        califica = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div/div[2]/div[2]/span[1]/span/span"
-        #numCalifica = ""
-        imagen = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div/div[1]/div/a/div/img"
-
-        print(nombreProducto)
-
+    for link in link_list:
+        sleep(2)
+        driver.get(link)
         try:
-            pagina.wait_for_selector(contenidorPrincipal, timeout=10 * 1000)
-        except PlaywrightTimeoutError:
-            print(f"Error al cargar el contenido. Vuelva a intentar en unos minutos")
+            name_list.append(driver.find_element(By.XPATH, '//h1[@class="x-item-title__mainTitle"]/span').text)
+            price_list.append(driver.find_element(By.XPATH, '//div[@class="x-price-primary"]/span').text)
+            try:
+                image = driver.find_element(By.XPATH,
+                                            '//div[@class="ux-image-carousel-item image-treatment active  image"]/img')
+                image_list.append(image.get_attribute('src'))
+            except:
+                print("Could not process image. Try another way")
+                image_list.append(np.nan)
+            seller_name_list.append(
+                driver.find_element(By.XPATH, '//div[@class="x-sellercard-atf__info__about-seller"]/a/span').text)
+            seller_rating_list.append(
+                driver.find_element(By.XPATH, '//li[@data-testid="x-sellercard-atf__data-item"]/a/span').text)
+            condition_list.append(driver.find_element(By.XPATH, '//div[@class="ux-icon-text"]/span/span/span').text)
 
-        try:
-            ultimaPagina = pagina.query_selector(
-                totalPaginasUno).inner_text().strip()
         except:
-            #ultimaPagina = pagina.query_selector(
-                #totalPaginasDos)[-2].get_attribute('aria-label').split()[-1]
-            ultimaPagina=1
+            name_list.append(np.nan)
+            price_list.append(np.nan)
+            image_list.append(np.nan)
+            seller_name_list.append(np.nan)
+            seller_rating_list.append(np.nan)
+            condition_list.append(np.nan)
 
-        print(f"El numero de paginas es: {ultimaPagina}")
-        print(f"Realizando scraping a: {produbuscar}")
+    df = pd.DataFrame({"Product": name_list,
+                       "Price": price_list,
+                       "Image": image_list, "Seller Name": seller_name_list,
+                       "Seller Rating": seller_rating_list,
+                       "Condition": condition_list})
+    df.dropna(axis=0, inplace=True)
 
-        for click in range(1, 2):
-            print(f"pagina de scraping numero: {click}")
-            pagina.wait_for_timeout(timeout=tiempoAlea(8) * 1000)
-            for content in pagina.query_selector_all(contenidorPrincipal):
-                datos = {
-                    "Producto": catchClause.text(content.query_selector('.//*[@class="s-item__title"]//text()')),
-                    "ASIN": catchClause.attributes(content, 'data-asin'),
-                    "Precio": catchClause.text(content.query_selector(precio)),
-                    #"Precio Original": catchClause.text(content.query_selector(precioAnterior)),
-                    "Calificacion": catchClause.text(content.query_selector(califica)),
-                    #"Numero de Calificaciones": re.sub(r"[()]", "",
-                                                       #catchClause.text(content.query_selector(numCalifica))),
-                    "Enlace Producto": f"""https://www.amazon.com{catchClause.attributes(content.query_selector(enlace), 'href')}""",
-                    "Imagen": F"""{catchClause.attributes(content.query_selector(imagen), 'src')}"""
-                }
-                datos_eBay.append(datos)
-
-                try:
-                    pagina.query_selector(siguienteBoton).click()
-                except AttributeError:
-                    print(f"Hay problemas con las eccion {pagina.url} numero: {click}")
-                    break
-        navegador.close()
-    print(f"Scraping realizado con exito")
-
-    df = pd.DataFrame(datos_eBay)
     df.to_excel(f"output/{nombre_archivo}.xlsx", index=False)
     print(f"{produbuscar}.xlsx creado con exito")
 
