@@ -138,7 +138,7 @@ def main(url, mode='headless'):
 
 def return_summary(product1,product2):
 
-    product_search = product1 + "vs" + product2
+    product_search = product1 + "vs" + product2 + "comparison with transcript"
     url = "https://www.youtube.com/results?search_query=" + product_search
 
     driver = open_url_in_chrome(url,'headed')
