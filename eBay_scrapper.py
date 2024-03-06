@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 import undetected_chromedriver as uc
 
 def scrapper(head, produbuscar, nombre_archivo):
+    print(f'iniciando scrapper ebay de {produbuscar}')
     option = webdriver.ChromeOptions()
     option.add_argument(head)
     driver = uc.Chrome(options=option)

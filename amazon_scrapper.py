@@ -32,9 +32,9 @@ def scraping(head,produbuscar,nombre_archivo):
 
     #produbuscar = str(input("Ingrese el producto a buscar: "))
     produinuser = produbuscar.replace(" ","+")
-    ingresoProducto = f"https://www.amazon.com/s?k={produinuser}"
+    ingresoProducto = f"https://www.amazon.es/s?k={produinuser}"
 
-    amazon_link_pattern = re.search("^https://www.amazon.com/s\?.+", ingresoProducto)
+    amazon_link_pattern = re.search("^https://www.amazon.es/s\?.+", ingresoProducto)
 
     if amazon_link_pattern == None:
         print("El link de Amazon no es válido")
@@ -43,7 +43,7 @@ def scraping(head,produbuscar,nombre_archivo):
     print(ingresoProducto)
     
     with sync_playwright() as play:
-        navegador = play.chromium.launch(headless=head, slow_mo=3*1000)
+        navegador = play.chromium.launch(headless=False, slow_mo=3*1000)
         pagina = navegador.new_page(user_agent=agenteUsuario())
         pagina.goto(ingresoProducto)
 

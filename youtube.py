@@ -161,7 +161,7 @@ def return_summary(product1,product2):
     xpath = '//*[@id="inline-preview-player"]/div[3]/div[2]/div/a'
 
     # Wait for the element to be present in the DOM
-    element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+    element = WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, xpath)))
 
     # Extract the href attribute value
     youtube_link = element.get_attribute("href")
