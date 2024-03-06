@@ -9,7 +9,7 @@ def main():
 
     if st.button("Scrape Amazon"):
         with st.spinner("Scraping Amazon..."):
-            scrapper("--headless", product_name, "productTest")
+            scrapper("--headless", product_name, "FILE")
             st.success("eBay scraped successfully!")
 
             #st.write(f"Product {product_name} results in eBay")

@@ -34,7 +34,7 @@ def scrapper(head, produbuscar, nombre_archivo):
     for product in products:
         link_list.append(product.get_attribute('href'))
 
-    for link in link_list:
+    for link in link_list[:5]:
         sleep(2)
         driver.get(link)
         try:
@@ -60,14 +60,14 @@ def scrapper(head, produbuscar, nombre_archivo):
             seller_name_list.append(np.nan)
             seller_rating_list.append(np.nan)
             condition_list.append(np.nan)
-
+    print(name_list)
     df = pd.DataFrame({"Product": name_list,
                        "Price": price_list,
                        "Image": image_list, "Seller Name": seller_name_list,
                        "Seller Rating": seller_rating_list,
                        "Condition": condition_list})
+    print(df.head())
     df.dropna(axis=0, inplace=True)
-
     df.to_excel(f"output/{nombre_archivo}.xlsx", index=False)
     print(f"{produbuscar}.xlsx creado con exito")
 
