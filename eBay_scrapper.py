@@ -71,6 +71,7 @@ def scrapper(head, produbuscar, nombre_archivo):
     df.dropna(axis=0, inplace=True)
     df.to_excel(f"output/{nombre_archivo}.xlsx", index=False)
     print(f"{produbuscar}.xlsx creado con exito")
+    return df
 
 
 
