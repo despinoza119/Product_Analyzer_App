@@ -35,7 +35,7 @@ def scrapper(head, produbuscar, nombre_archivo):
         totalPaginasDos = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[62]/div[2]/span/span/nav/ol/li[2]/a"
         siguienteBoton = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[62]/div[2]/span/span/nav/a"
 
-        contenidorPrincipal = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div"
+        contenidorPrincipal = '//*[@id="srp-river-results"]'
 
         enlace = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div/div[2]/a"
         precio = "/html/body/div[4]/div[4]/div[2]/div[1]/div[2]/ul/li[2]/div/div[2]/div[2]/div[1]/span[@class='s-item__price']"
@@ -62,12 +62,12 @@ def scrapper(head, produbuscar, nombre_archivo):
         print(f"El numero de paginas es: {ultimaPagina}")
         print(f"Realizando scraping a: {produbuscar}")
 
-        for click in range(1, int(ultimaPagina)):
+        for click in range(1, 2):
             print(f"pagina de scraping numero: {click}")
             pagina.wait_for_timeout(timeout=tiempoAlea(8) * 1000)
             for content in pagina.query_selector_all(contenidorPrincipal):
                 datos = {
-                    "Producto": catchClause.text(content.query_selector(enlace)),
+                    "Producto": catchClause.text(content.query_selector('.//*[@class="s-item__title"]//text()')),
                     "ASIN": catchClause.attributes(content, 'data-asin'),
                     "Precio": catchClause.text(content.query_selector(precio)),
                     #"Precio Original": catchClause.text(content.query_selector(precioAnterior)),
