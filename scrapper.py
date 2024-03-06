@@ -13,3 +13,4 @@ tiempoMinutos = round(tiempoTotal / 60)
 
 print(f"Tiempo requerido: {tiempoTotal} segundos ({tiempoSegundos} segundos) ({tiempoMinutos} minutos)")
 
+

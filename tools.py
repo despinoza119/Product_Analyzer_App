@@ -66,6 +66,7 @@ def scraping(head,produbuscar,nombre_archivo):
         print(nombreProducto)
 
         try:
+            print("Waiting for page to load...")
             pagina.wait_for_selector(contenidorPrincipal,timeout=10*1000)
         except PlaywrightTimeoutError:
             print(f"Error al cargar el contenido. Vuelva a intentar en unos minutos")
