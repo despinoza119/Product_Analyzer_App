@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 api_key=['OPENAI_API_KEY']
 
-client = OpenAI(api_key) #copy your api key here
+client = OpenAI() #copy your api key here
 
 def chat_with_chatgpt(prompt,model="gpt-3.5-turbo"):
     response = client.chat.completions.create(model=model,
