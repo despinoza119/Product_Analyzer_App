@@ -35,7 +35,7 @@ def scrapper(head, produbuscar, nombre_archivo):
     for product in products:
         link_list.append(product.get_attribute('href'))
 
-    for link in link_list[:5]:
+    for link in link_list[:12]:
         sleep(2)
         driver.get(link)
         try:
@@ -69,6 +69,7 @@ def scrapper(head, produbuscar, nombre_archivo):
                        "Condition": condition_list})
     print(df.head())
     df.dropna(axis=0, inplace=True)
+    df.sort_values(by="Price", ascending=False, inplace=True)
     df.to_excel(f"output/{nombre_archivo}.xlsx", index=False)
     print(f"{produbuscar}.xlsx creado con exito")
     return df

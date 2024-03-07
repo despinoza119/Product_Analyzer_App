@@ -19,7 +19,7 @@ def open_url_in_chrome(url, mode='headed'):
         driver = webdriver.Chrome('./chromedriver.exe', options=options)
     
     driver.get(url)
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="title"]/h1/yt-formatted-string')))
+    WebDriverWait(driver, 40).until(EC.presence_of_element_located((By.XPATH, '//*[@id="title"]/h1/yt-formatted-string')))
     sleep(3)
     return driver
 
@@ -138,7 +138,7 @@ def main(url, mode='headless'):
 
 def return_summary(product1,product2):
 
-    product_search = product1 + "vs" + product2 + "comparison with transcript"
+    product_search = product1 + "vs" + product2 # + "comparison with transcript"
     url = "https://www.youtube.com/results?search_query=" + product_search
 
     driver = open_url_in_chrome(url,'headed')

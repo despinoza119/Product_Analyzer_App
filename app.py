@@ -29,32 +29,55 @@ def main():
             tiempoInicio = time.time()
             make_headless = True
             scraping(make_headless,input1,"product1_amazon")
-            df1=pd.read_excel("output/product1_amazon.xlsx")
-            st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
-            st.write("## Amazon:")
-            st.image(df1.loc[1, 'Imagen'], width=300, caption='Imagen centrada', use_column_width=True)
-            st.table(df1.head(5))
-
             scraping(make_headless,input2,"product2_amazon")
+            df1=pd.read_excel("output/product1_amazon.xlsx")
+            df1.reset_index(drop=True, inplace=True)
+
             df2=pd.read_excel("output/product2_amazon.xlsx")
-            st.image(df2.loc[1, 'Imagen'])
-            st.table(df2.head(5))
+            df2.reset_index(drop=True, inplace=True)
+
+            col1, col2 = st.columns(2)
+            col1.subheader(f"{input1}")
+            col1.image(df1.loc[1, 'Imagen'])
+            col1.subheader(df1.loc[1, 'Precio'])
+            col1.subheader(df1.loc[1, 'Calificacion'])
+            col1.image("https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", width=150)
+            col1.dataframe(df1.head(5))
+
+            col2.subheader(f"{input1}")
+            col2.image(df2.loc[1, 'Imagen'])
+            col2.subheader(df1.loc[1, 'Precio'])
+            col2.subheader(df1.loc[1, 'Calificacion'])
+            col2.image("https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", width=150)
+            col2.dataframe(df2.head(5))
 
             scrapper("--headless", input1, "product1_ebay")
             st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
             st.write("## Ebay:")
             st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
-            df3=pd.read_excel("output/product1_ebay.xlsx")
-            st.image(df3.loc[1, 'Image'])
-            st.table(df3.head(5))
 
-            scrapper("--headless", input2, "product2_ebay")
+            df3=pd.read_excel("output/product1_ebay.xlsx")
+            df3.reset_index(drop=True, inplace=True)
+
             df4=pd.read_excel("output/product2_ebay.xlsx")
-            st.image(df4.loc[1, 'Image'], width=300, caption='Imagen centrada', use_column_width=True)
-            st.table(df4.head(5))
+            df4.reset_index(drop=True, inplace=True)
+
+            col1.subheader(f"{input1}")
+            col1.image(df3.loc[1, 'Image'])
+            col1.subheader(df3.loc[1, 'Price'])
+            col1.subheader(df3.loc[1, 'Condition'])
+            col1.image("https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", width=150)
+            col1.dataframe(df3.head(5))
+
+            col2.subheader(f"{input2}")
+            col2.image(df4.loc[1, 'Image'])
+            col2.subheader(df4.loc[1, 'Price'])
+            col2.subheader(df4.loc[1, 'Condition'])
+            col2.dataframe(df4.head(5))
 
         else:
             st.write("Please enter two products to compare.")
 
 if __name__ == "__main__":
+    #show_ebay_section = st.sidebar.checkbox("Show eBay Section")
     main()
