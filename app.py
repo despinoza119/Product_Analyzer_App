@@ -1,10 +1,11 @@
 import streamlit as st
 import pandas as pd
-import time
+import time as time
 from youtube import obtain_transcript
 from resume import compare_products
 from youtube import return_summary
 from amazon_scrapper import scraping
+from eBay_scrapper import scrapper
 
 def main():
     st.title("Product Comparison")
@@ -23,23 +24,24 @@ def main():
         if input1 and input2:
             obtain_transcript(input1, input2)
             result = compare_products()
-
-            # Display result as a paragraph in one page
-            st.write("## Comparison of products:")
             st.write(result)
+
             tiempoInicio = time.time()
-
             make_headless = True
+            scraping(make_headless,input1,"product1_amazon")
+            scraping(make_headless,input2,"product2_amazon")
 
-            scraping(make_headless, input1, "product1")
-            scraping(make_headless, input2, "product2")
+            df1=pd.read_excel("output/product1_amazon.xlsx")
+            df2=pd.read_excel("output/product2_amazon.xlsx")
+            st.table(df1.head(5))
+            st.table(df2.head(5))
 
-            # Display tables in another page
-            st.write("## Amazon Prices:")
-            st.write(f"### {input1}:")
-            st.table(pd.read_excel("output/product1.xlsx"))
-            st.write(f"### {input2}:")
-            st.table(pd.read_excel("output/product2.xlsx"))
+            scrapper("--headless", input1, "product1_ebay")
+            scrapper("--headless", input2, "product2_ebay")
+            df3=pd.read_excel("output/product1_ebay.xlsx")
+            df4=pd.read_excel("output/product2_ebay.xlsx")
+            st.table(df3.head(5))
+            st.table(df4.head(5))
 
         else:
             st.write("Please enter two products to compare.")
