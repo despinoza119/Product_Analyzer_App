@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 def open_url_in_chrome(url, mode='headed'):
     #print(f'Opening {url}')
     if mode == 'headed':
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()))
 
     elif mode == 'headless':   
         options = webdriver.ChromeOptions()
