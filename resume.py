@@ -11,7 +11,7 @@ def chat_with_chatgpt(prompt,model="gpt-3.5-turbo"):
     messages=[
         {
             "role": "system",
-            "content": "Give me two columns of pros and cons for each product separated by a *, is very important to put the * at the end of the first column and at the beginning of the second column.",
+            "content": "You are receiving a youtube transcript and i want you to do a summary specifying the differences between the two products that they talk about",
             "content": "Always put a ----- separator between the information of each product (obligatory), give me the answer always in english"
         },
         {

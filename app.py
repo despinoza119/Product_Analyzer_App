@@ -26,8 +26,8 @@ def main():
                 obtain_transcript(input1, input2)
                 result = compare_products()
                 st.write(result)
-            except:
-                print('No comparison of products available')
+            except Exception as e:
+                print(f'No comparison of products available {e}')
                 st.write('No comparison of products available')
             
             try:

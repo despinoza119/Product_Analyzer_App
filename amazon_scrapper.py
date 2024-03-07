@@ -43,7 +43,7 @@ def scraping(head,produbuscar,nombre_archivo):
     print(ingresoProducto)
     
     with sync_playwright() as play:
-        navegador = play.chromium.launch(headless=False, slow_mo=3*1000)
+        navegador = play.chromium.launch(headless=True, slow_mo=3*1000)
         pagina = navegador.new_page(user_agent=agenteUsuario())
         pagina.goto(ingresoProducto)
 
