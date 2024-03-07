@@ -8,16 +8,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def open_url_in_chrome(url, mode='headed'):
+def open_url_in_chrome(url, mode='headless'):
     #print(f'Opening {url}')
     if mode == 'headed':
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-
-    elif mode == 'headless':   
+        print('HEADED MODE')
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
         options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome('./chromedriver.exe', options=options)
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+    elif mode == 'headless':   
+        print('HEADLESS MODE')
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
+        options.add_argument("--no-sandbox")
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     
     driver.get(url)
     WebDriverWait(driver, 40).until(EC.presence_of_element_located((By.XPATH, '//*[@id="title"]/h1/yt-formatted-string')))
@@ -142,7 +147,7 @@ def return_summary(product1,product2):
     product_search = product1 + "vs" + product2 # + "comparison with transcript"
     url = "https://www.youtube.com/results?search_query=" + product_search
 
-    driver = open_url_in_chrome(url,'headed')
+    driver = open_url_in_chrome(url,'headless')
 
     accept_T_and_C(driver)
 
