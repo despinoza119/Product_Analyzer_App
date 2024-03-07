@@ -10,16 +10,16 @@ from eBay_scrapper import scrapper
 def main():
     st.title("Compare Products App")
 
-    # Configurar el diseño en dos columnas
+    # Two columns design
     col1, col2 = st.columns(2)
 
-    # Input para el primer producto en la primera columna
+    # Input for the first product in the first column
     input1 = col1.text_input("Enter the first product:", "")
 
-    # Input para el segundo producto en la segunda columna
+    # Input for the second product in the second column
     input2 = col2.text_input("Enter the second product:", "")
 
-    # Botón para comparar productos debajo de los inputs
+    # Button to start the process of comparing products and obtaining data from ebay and amazon
     if st.button("Compare Products"):
         if input1 and input2:
             try: 
@@ -90,5 +90,4 @@ def main():
             st.write("Please enter two products to compare.")
 
 if __name__ == "__main__":
-    #show_ebay_section = st.sidebar.checkbox("Show eBay Section")
     main()

@@ -4,10 +4,12 @@ import random
 import pandas as pd
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
+# Function that makes an aleatory time
 def tiempoAlea(val):
     ranges = [i for i in range(3,val+1)]
     return random.choice(ranges)
 
+# Use different agents to avoid being detected as a bot
 def agenteUsuario():
     with open('user-agents.txt') as f:
         agente = f.read().split("\n")
@@ -26,6 +28,7 @@ class TryExcept:
         except AttributeError:
             return "Valor No Disponible"
 
+# Function that makes the scraping of a product and save it like an excel file with specific name
 def scraping(head,produbuscar,nombre_archivo):
     datosAmazon = []
     catchClause = TryExcept()
@@ -108,17 +111,13 @@ def scraping(head,produbuscar,nombre_archivo):
 
     df = pd.DataFrame(datosAmazon)
 
-    # Crear una nueva columna 'Precio_Num' y extraer números, asignando 0 si no hay números
+    # Create a new column to sort values by the highest price
     df['Precio_Num'] = df['Precio'].str.extract('(\d+\.\d+|\d+)', expand=False)
     df['Precio_Num'] = pd.to_numeric(df['Precio_Num'], errors='coerce').fillna(0)
-    
-    # Ordenar el DataFrame por la columna 'Precio_Num' de mayor a menor
     df_sorted = df.sort_values(by='Precio_Num', ascending=False)
 
-    # Si quieres, puedes eliminar la columna 'Precio_Num' después de ordenar
-    #df_sorted.drop('Precio_Num', axis=1, inplace=True)
-
     df_sorted.to_excel(f"output/{nombre_archivo}.xlsx",index=False)
+    
     print(f"{produbuscar}.xlsx creado con exito")
 
 
