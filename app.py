@@ -52,7 +52,10 @@ def main():
             col2.dataframe(df2.head(5))
 
             scrapper("--headless", input1, "product1_ebay")
-            scrapper("--headless", input2, "product2_ebay")
+            st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
+            st.write("## Ebay:")
+            st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
+
             df3=pd.read_excel("output/product1_ebay.xlsx")
             df3.reset_index(drop=True, inplace=True)
 
