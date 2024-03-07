@@ -107,7 +107,18 @@ def scraping(head,produbuscar,nombre_archivo):
     print(f"Scraping realizado con exito")
 
     df = pd.DataFrame(datosAmazon)
-    df.to_excel(f"output/{nombre_archivo}.xlsx",index=False)
+
+    # Crear una nueva columna 'Precio_Num' y extraer números, asignando 0 si no hay números
+    df['Precio_Num'] = df['Precio'].str.extract('(\d+\.\d+|\d+)', expand=False)
+    df['Precio_Num'] = pd.to_numeric(df['Precio_Num'], errors='coerce').fillna(0)
+    
+    # Ordenar el DataFrame por la columna 'Precio_Num' de mayor a menor
+    df_sorted = df.sort_values(by='Precio_Num', ascending=False)
+
+    # Si quieres, puedes eliminar la columna 'Precio_Num' después de ordenar
+    #df_sorted.drop('Precio_Num', axis=1, inplace=True)
+
+    df_sorted.to_excel(f"output/{nombre_archivo}.xlsx",index=False)
     print(f"{produbuscar}.xlsx creado con exito")
 
 

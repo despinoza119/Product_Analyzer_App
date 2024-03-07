@@ -61,13 +61,13 @@ def scrapper(head, produbuscar, nombre_archivo):
             seller_name_list.append(np.nan)
             seller_rating_list.append(np.nan)
             condition_list.append(np.nan)
-    print(name_list)
+    #print(name_list)
     df = pd.DataFrame({"Product": name_list,
                        "Price": price_list,
                        "Image": image_list, "Seller Name": seller_name_list,
                        "Seller Rating": seller_rating_list,
                        "Condition": condition_list})
-    print(df.head())
+    #print(df.head())
     df.dropna(axis=0, inplace=True)
     df.sort_values(by="Price", ascending=False, inplace=True)
     df.to_excel(f"output/{nombre_archivo}.xlsx", index=False)

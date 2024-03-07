@@ -1,7 +1,10 @@
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
 
-client = OpenAI(api_key="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")
+api_key=['OPENAI_API_KEY']
+
+client = OpenAI(api_key) #copy your api key here
 
 def chat_with_chatgpt(prompt,model="gpt-3.5-turbo"):
     response = client.chat.completions.create(model=model,
@@ -9,7 +12,7 @@ def chat_with_chatgpt(prompt,model="gpt-3.5-turbo"):
         {
             "role": "system",
             "content": "Give me two columns of pros and cons for each product separated by a *, is very important to put the * at the end of the first column and at the beginning of the second column.",
-            "content": "Always put a ----- separator between the information of each product (obligatory)"
+            "content": "Always put a ----- separator between the information of each product (obligatory), give me the answer always in english"
         },
         {
             "role": "user",
