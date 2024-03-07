@@ -16,6 +16,7 @@ def open_url_in_chrome(url, mode='headed'):
     elif mode == 'headless':   
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
+        options.add_argument("--no-sandbox")
         driver = webdriver.Chrome('./chromedriver.exe', options=options)
     
     driver.get(url)
