@@ -11,11 +11,9 @@ from selenium import webdriver
 
 def scrapper(head, produbuscar, nombre_archivo):
     print(f'iniciando scrapper ebay de {produbuscar}')
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=chrome_options)
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless=new")
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
 
     name_list = []
     price_list = []

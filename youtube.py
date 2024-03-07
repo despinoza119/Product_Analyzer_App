@@ -14,16 +14,14 @@ def open_url_in_chrome(url, mode='headless'):
     if mode == 'headed':
         print('HEADED MODE')
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        options.add_argument("--headless=new")
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
 
     elif mode == 'headless':   
         print('HEADLESS MODE')
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        options.add_argument("--headless=new")
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
     
     driver.get(url)
     WebDriverWait(driver, 40).until(EC.presence_of_element_located((By.XPATH, '//*[@id="title"]/h1/yt-formatted-string')))
