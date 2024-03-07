@@ -29,18 +29,28 @@ def main():
             tiempoInicio = time.time()
             make_headless = True
             scraping(make_headless,input1,"product1_amazon")
-            scraping(make_headless,input2,"product2_amazon")
-
             df1=pd.read_excel("output/product1_amazon.xlsx")
-            df2=pd.read_excel("output/product2_amazon.xlsx")
+            st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
+            st.write("## Amazon:")
+            st.image(df1.loc[1, 'Imagen'], width=300, caption='Imagen centrada', use_column_width=True)
             st.table(df1.head(5))
+
+            scraping(make_headless,input2,"product2_amazon")
+            df2=pd.read_excel("output/product2_amazon.xlsx")
+            st.image(df2.loc[1, 'Imagen'])
             st.table(df2.head(5))
 
             scrapper("--headless", input1, "product1_ebay")
-            scrapper("--headless", input2, "product2_ebay")
+            st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
+            st.write("## Ebay:")
+            st.image("https://ams3.digitaloceanspaces.com/graffica/2023/03/amazon_logo._CB633267048_.png")
             df3=pd.read_excel("output/product1_ebay.xlsx")
-            df4=pd.read_excel("output/product2_ebay.xlsx")
+            st.image(df3.loc[1, 'Image'])
             st.table(df3.head(5))
+
+            scrapper("--headless", input2, "product2_ebay")
+            df4=pd.read_excel("output/product2_ebay.xlsx")
+            st.image(df4.loc[1, 'Image'], width=300, caption='Imagen centrada', use_column_width=True)
             st.table(df4.head(5))
 
         else:
