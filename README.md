@@ -5,10 +5,10 @@
 
 
 ## Overview
-
+This project aims to create an application where a user can input two products they want to compare to make a purchasing decision. The program will search for a comparative video on YouTube and analyze the transcripts to generate a comparative summary of both products. Additionally, it will display the top products and their scores in reviews from Amazon and eBay.
 
 <p align="center">
-  <img src="docs/llm.png" alt="Sample Image" width="400">
+  <img src="product_analyzer.png" alt="Sample Image" width="400">
 </p>
 
 ## Setup Instructions
